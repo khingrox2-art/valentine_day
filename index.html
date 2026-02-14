@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Daisy Bouquet - Final</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff1f6;
+    overflow: hidden;
+    font-family: 'Arial Rounded MT Bold', sans-serif;
+  }
+
+  /* กลุ่มหลักที่ควบคุมทุกอย่างไว้ด้วยกัน */
+  .bouquet-main {
+    position: relative;
+    width: 200px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .header {
+    position: absolute;
+    top: -100px;
+    width: 300px;
+    text-align: center;
+    font-size: 38px;
+    color: #df8ba7;
+    white-space: nowrap;
+  }
+
+  /* ดวงอาทิตย์ */
+  .sun {
+    position: absolute;
+    top: 20px;
+    width: 60px;
+    height: 60px;
+    background: #ffc44d;
+    border: 3px solid #e69b00;
+    border-radius: 50%;
+    z-index: 1;
+    animation: sunRise 3s ease-out;
+  }
+  .ray {
+    position: absolute;
+    width: 4px;
+    height: 15px;
+    background: #ffc44d;
+    border-radius: 10px;
+    top: 50%; left: 50%;
+  }
+  .ray:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg) translateY(-45px); }
+  .ray:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg) translateY(-45px); }
+  .ray:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg) translateY(-45px); }
+  .ray:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg) translateY(-45px); }
+  .ray:nth-child(5) { transform: translate(-50%, -50%) rotate(180deg) translateY(-45px); }
+  .ray:nth-child(6) { transform: translate(-50%, -50%) rotate(225deg) translateY(-45px); }
+  .ray:nth-child(7) { transform: translate(-50%, -50%) rotate(270deg) translateY(-45px); }
+  .ray:nth-child(8) { transform: translate(-50%, -50%) rotate(315deg) translateY(-45px); }
+
+  @keyframes sunRise {
+    0% { transform: translateY(50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ช่อดอกไม้ */
+  .wrap-paper {
+    position: absolute;
+    bottom: 20px;
+    width: 140px;
+    height: 250px;
+    background: #ffe4ee;
+    border: 3px solid #f2b5cc;
+    border-radius: 20px 20px 80px 80px;
+    z-index: 10;
+  }
+
+  .bow {
+    position: absolute;
+    bottom: 70px;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .bow-knot { width: 18px; height: 16px; background: #ff99bb; border: 2px solid #d46b8f; border-radius: 4px; z-index: 5; }
+  .bow-h { width: 30px; height: 25px; background: #ffb3cc; border: 2px solid #d46b8f; border-radius: 50%; position: absolute; }
+  .bow-h.l { left: -28px; transform: rotate(-15deg); }
+  .bow-h.r { right: -28px; transform: rotate(15deg); }
+
+  /* ดอกไม้ */
+  .flower-box {
+    position: absolute;
+    top: 40px;
+    width: 200px;
+    height: 150px;
+    z-index: 15;
+  }
+  .flower {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    animation: twinkle 3s infinite ease-in-out;
+  }
+  @keyframes twinkle {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.08); filter: brightness(1.1); }
+  }
+
+  .petal {
+    position: absolute;
+    width: 8px;
+    height: 20px;
+    background: white;
+    border: 1px solid #ffeef7;
+    border-radius: 50%;
+    left: 18.5px;
+    transform-origin: bottom center;
+  }
+  .f-center {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #fbc02d;
+    border: 1px solid #f9a825;
+    border-radius: 50%;
+    left: 15.5px;
+    top: 15.5px;
+    z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+<div class="bouquet-main">
+  <div class="header">For You Noo Bell 🌸</div>
+  
+  <div class="sun">
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div><div class="ray"></div>
+    <div class="ray"></div><div class="ray"></div><div class="ray"></div><div class="ray"></div>
+  </div>
+
+  <div class="flower-box" id="fb"></div>
+
+  <div class="wrap-paper"></div>
+
+  <div class="bow">
+    <div class="bow-h l"></div>
+    <div class="bow-knot"></div>
+    <div class="bow-h r"></div>
+  </div>
+</div>
+
+<script>
+  const fb = document.getElementById('fb');
+  // พิกัดแบบสัมพัทธ์ในกลุ่มดอกไม้
+  const pts = [
+    {x: 75, y: 10}, {x: 45, y: 30}, {x: 105, y: 30},
+    {x: 25, y: 60}, {x: 75, y: 60}, {x: 125, y: 60},
+    {x: 50, y: 90}, {x: 100, y: 90}, {x: 75, y: 120}
+  ];
+
+  pts.forEach((p, i) => {
+    const f = document.createElement('div');
+    f.className = 'flower';
+    f.style.left = p.x + 'px';
+    f.style.top = p.y + 'px';
+    f.style.animationDelay = (i * 0.3) + 's';
+
+    for(let i=0; i<10; i++) {
+      const pt = document.createElement('div');
+      pt.className = 'petal';
+      pt.style.transform = `rotate(${i*36}deg)`;
+      f.appendChild(pt);
+    }
+    const c = document.createElement('div');
+    c.className = 'f-center';
+    f.appendChild(c);
+    fb.appendChild(f);
+  });
+</script>
+
+</body>
+</html>
